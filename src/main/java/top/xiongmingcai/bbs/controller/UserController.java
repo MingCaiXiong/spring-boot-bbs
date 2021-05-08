@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.api.ApiController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.xiongmingcai.bbs.model.pojo.User;
 import top.xiongmingcai.bbs.service.UserService;
 
 import javax.annotation.Resource;
@@ -30,8 +31,8 @@ public class UserController extends ApiController {
             return failed("密码不能为空");
         }
 
-        userService.verifyLogin(usernaem, password);
-        return success(null);
+        User user = userService.verifyLogin(usernaem, password);
+        return success(user);
     }
 
 

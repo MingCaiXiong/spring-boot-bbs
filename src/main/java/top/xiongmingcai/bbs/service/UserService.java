@@ -1,5 +1,7 @@
 package top.xiongmingcai.bbs.service;
 
+import top.xiongmingcai.bbs.model.pojo.User;
+
 /**
  * Service：
  *
@@ -10,5 +12,5 @@ package top.xiongmingcai.bbs.service;
 public interface UserService {
 
 
-    void verifyLogin(String usernaem, String password);
+    User verifyLogin(String usernaem, String password);
 }

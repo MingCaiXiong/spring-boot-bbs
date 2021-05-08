@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public void verifyLogin(String usernaem, String password) {
+    public User verifyLogin(String usernaem, String password) {
 
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", usernaem);
@@ -35,5 +35,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().equals(password)) {
             throw new RuntimeException("密码输入有误!");
         }
+
+        return user;
     }
 }
