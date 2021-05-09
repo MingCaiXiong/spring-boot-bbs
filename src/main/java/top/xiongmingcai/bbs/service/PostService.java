@@ -21,4 +21,6 @@ public interface PostService {
 
 
     Post updatePost(Long id, PutPostReq putPostReq);
+
+    void deleteOnePost(Long id);
 }

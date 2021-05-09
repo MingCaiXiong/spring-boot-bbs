@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
         if (entity == null) {
             throw new BussinessException("p02", "没有Post ID " + id + "数据");
         }
-        nurllAwareBeancopyproperties(putPostReq, entity);
+        nullAwareBeancopyproperties(putPostReq, entity);
 
         int count = postMapper.updateById(entity);
         if (count != 1) {
@@ -63,7 +63,19 @@ public class PostServiceImpl implements PostService {
         return entity;
     }
 
-    private void nurllAwareBeancopyproperties(PutPostReq putPostReq, Post entity) {
+    @Override
+    public void deleteOnePost(Long id) {
+        Post entity = postMapper.selectById(id);
+        if (entity == null) {
+            throw new BussinessException("p02", "没有Post ID " + id + "数据");
+        }
+        int count = postMapper.deleteById(id);
+        if (count != 1) {
+            throw new BussinessException("p04", "帖子删除失败!");
+        }
+    }
+
+    private void nullAwareBeancopyproperties(PutPostReq putPostReq, Post entity) {
 
         if (putPostReq.getTitle() != null) {
             entity.setTitle(putPostReq.getTitle());

@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.extension.api.ApiController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import top.xiongmingcai.bbs.common.Constant;
 import top.xiongmingcai.bbs.model.pojo.Post;
@@ -41,10 +39,7 @@ public class PostController extends ApiController {
         HttpHeaders headers = new HttpHeaders();
         Map<String, Object> result = new HashMap<>();
         List<Post> postList = postService.findPostAll();
-        result.put("code", 0);
-        result.put("data", postList);
-        result.put("msg", "执行成功");
-        return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
+        return success(postList);
     }
 
 
@@ -54,27 +49,12 @@ public class PostController extends ApiController {
      * @param addPostReq
      */
     @PostMapping
-    public Object add(@Valid AddPostReq addPostReq, HttpSession session, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-
-            List<ObjectError> allErrors = bindingResult.getAllErrors();
-            for (ObjectError error : allErrors) {
-                System.out.println(error.getCode() + "-" + error.getDefaultMessage());
-            }
-            return allErrors;
-        }
+    public Object add(@Valid AddPostReq addPostReq, HttpSession session) {
         User user = (User) session.getAttribute(Constant.loginUser);
-        Post post = postService.add(addPostReq, user.getUsername());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, String.valueOf(post.getId()));
-        Map<String, Object> result = new HashMap<>();
+        postService.add(addPostReq, user.getUsername());
         List<Post> postList = postService.findPostAll();
-        result.put("code", 0);
-        result.put("data", postList);
-        result.put("msg", "执行成功");
-        return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
+
+        return success(postList);
     }
 
     /**
@@ -85,18 +65,21 @@ public class PostController extends ApiController {
      */
     @PutMapping("{id}")
     public Object update(@PathVariable Long id, PutPostReq putPostReq) {
-        Map<String, Object> result = new HashMap<>();
+        //无内如变化
         if (putPostReq.getTitle() == null && putPostReq.getContent() == null) {
-            return new ResponseEntity<>(result, HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
         postService.updatePost(id, putPostReq);
 
         List<Post> postList = postService.findPostAll();
-        result.put("code", 0);
-        result.put("data", postList);
-        result.put("msg", "执行成功");
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+        return success(postList);
     }
 
+    @DeleteMapping("{id}")
+    public Object delete(@PathVariable Long id) {
 
+        postService.deleteOnePost(id);
+
+        return success(null);
+    }
 }
