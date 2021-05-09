@@ -18,6 +18,11 @@ public class BussinessException extends RuntimeException {
         this.msg = msg;
     }
 
+    public BussinessException(String msg) {
+        super(msg);
+        this.msg = msg;
+    }
+
     public String getCode() {
         return code;
     }
