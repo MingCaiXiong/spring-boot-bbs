@@ -2,17 +2,17 @@ package top.xiongmingcai.bbs.model.request;
 
 import javax.validation.constraints.NotBlank;
 
-public class AddPostReq {
+public class PostReq {
     /**
      *
      */
-    @NotBlank(message = "不能为空。")
+    @NotBlank(message = "不能为空", groups = {Update.class, Add.class})
     private String title;
 
     /**
      *
      */
-    @NotBlank(message = "不能为空。")
+    @NotBlank(message = "不能为空", groups = {Add.class})
     private String content;
 
     public String getTitle() {
@@ -29,5 +29,18 @@ public class AddPostReq {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+
+    /**
+     * 更新的时候校验分组
+     */
+    public interface Update {
+    }
+
+    /**
+     * 添加的时候校验分组
+     */
+    public interface Add {
     }
 }

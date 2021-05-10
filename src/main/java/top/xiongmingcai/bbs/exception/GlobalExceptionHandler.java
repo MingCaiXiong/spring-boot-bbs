@@ -46,7 +46,7 @@ public class GlobalExceptionHandler extends ApiController {
         logger.error("发生空值异常！原因是：{}", ex.getMessage());
         String url = req.getRequestURI();
         System.out.println("发生空值异常 url:" + url);
-        return failed(url + "缺省参数 ");
+        return failed("缺省参数 ");
     }
 
     /**

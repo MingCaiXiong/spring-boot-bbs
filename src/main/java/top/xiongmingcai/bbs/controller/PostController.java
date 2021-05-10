@@ -6,13 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import top.xiongmingcai.bbs.common.Constant;
 import top.xiongmingcai.bbs.model.pojo.Post;
 import top.xiongmingcai.bbs.model.pojo.User;
-import top.xiongmingcai.bbs.model.request.AddPostReq;
-import top.xiongmingcai.bbs.model.request.PutPostReq;
+import top.xiongmingcai.bbs.model.request.PostReq;
 import top.xiongmingcai.bbs.service.PostService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -44,12 +42,12 @@ public class PostController extends ApiController {
     /**
      * 添加一个 帖子
      *
-     * @param addPostReq
+     * @param postReq
      */
     @PostMapping
-    public Object add(@Valid AddPostReq addPostReq, HttpSession session) {
+    public Object add(@RequestBody(required = false) @Validated(PostReq.Add.class) PostReq postReq, HttpSession session) {
         User user = (User) session.getAttribute(Constant.loginUser);
-        postService.add(addPostReq, user.getUsername());
+        postService.add(postReq, user.getUsername());
         List<Post> postList = postService.findPostAll();
 
         return success(postList);
@@ -58,13 +56,13 @@ public class PostController extends ApiController {
     /**
      * 修改一个 帖子
      *
-     * @param id         主键ID
-     * @param putPostReq 修改后的信息
+     * @param id      主键ID
+     * @param postReq 修改后的信息
      */
     @PutMapping("{id}")
-    public Object update(@PathVariable @Min(value = 0, message = "不能小于0") Long id, @Valid @RequestBody(required = false) PutPostReq putPostReq) {
+    public Object update(@PathVariable @Min(value = 0, message = "不能小于0") Long id, @Validated({PostReq.Update.class}) @RequestBody(required = false) PostReq postReq) {
 
-        postService.updatePost(id, putPostReq);
+        postService.updatePost(id, postReq);
 
         List<Post> postList = postService.findPostAll();
         return success(postList);

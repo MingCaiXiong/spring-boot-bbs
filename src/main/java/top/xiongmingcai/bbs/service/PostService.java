@@ -1,8 +1,7 @@
 package top.xiongmingcai.bbs.service;
 
 import top.xiongmingcai.bbs.model.pojo.Post;
-import top.xiongmingcai.bbs.model.request.AddPostReq;
-import top.xiongmingcai.bbs.model.request.PutPostReq;
+import top.xiongmingcai.bbs.model.request.PostReq;
 
 import java.util.List;
 
@@ -15,12 +14,12 @@ import java.util.List;
 public interface PostService {
 
 
-    Post add(AddPostReq addPostReq, String username);
+    Post add(PostReq postReq, String username);
 
     List<Post> findPostAll();
 
 
-    Post updatePost(Long id, PutPostReq putPostReq);
+    Post updatePost(Long id, PostReq putPostReq);
 
     void deleteOnePost(Long id);
 }

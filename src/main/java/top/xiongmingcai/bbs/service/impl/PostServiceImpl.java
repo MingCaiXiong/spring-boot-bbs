@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service;
 import top.xiongmingcai.bbs.exception.BussinessException;
 import top.xiongmingcai.bbs.model.dao.PostMapper;
 import top.xiongmingcai.bbs.model.pojo.Post;
-import top.xiongmingcai.bbs.model.request.AddPostReq;
-import top.xiongmingcai.bbs.model.request.PutPostReq;
+import top.xiongmingcai.bbs.model.request.PostReq;
 import top.xiongmingcai.bbs.service.PostService;
 
 import javax.annotation.Resource;
@@ -28,7 +27,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public Post add(AddPostReq postReq, String username) {
+    public Post add(PostReq postReq, String username) {
         Post entity = new Post();
         entity.setUsername(username);
         entity.setCreateTime(LocalDateTime.now());
@@ -49,7 +48,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(Long id, PutPostReq putPostReq) {
+    public Post updatePost(Long id, PostReq putPostReq) {
         Post entity = postMapper.selectById(id);
         if (entity == null) {
             throw new BussinessException("p02", "没有Post ID " + id + "数据");
@@ -82,7 +81,7 @@ public class PostServiceImpl implements PostService {
      * @param putPostReq
      * @param entity
      */
-    private void nullAwareBeancopyproperties(PutPostReq putPostReq, Post entity) {
+    private void nullAwareBeancopyproperties(PostReq putPostReq, Post entity) {
 
         if (putPostReq.getTitle() != null) {
             entity.setTitle(putPostReq.getTitle());
