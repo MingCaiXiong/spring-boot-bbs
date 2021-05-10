@@ -54,6 +54,7 @@ public class PostServiceImpl implements PostService {
         if (entity == null) {
             throw new BussinessException("p02", "没有Post ID " + id + "数据");
         }
+        //只复制有值的
         nullAwareBeancopyproperties(putPostReq, entity);
 
         int count = postMapper.updateById(entity);
@@ -75,6 +76,12 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    /**
+     * 只复制有值的
+     *
+     * @param putPostReq
+     * @param entity
+     */
     private void nullAwareBeancopyproperties(PutPostReq putPostReq, Post entity) {
 
         if (putPostReq.getTitle() != null) {

@@ -1,9 +1,7 @@
 package top.xiongmingcai.bbs.controller;
 
 import com.baomidou.mybatisplus.extension.api.ApiController;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.xiongmingcai.bbs.common.Constant;
 import top.xiongmingcai.bbs.model.pojo.Post;
@@ -15,9 +13,9 @@ import top.xiongmingcai.bbs.service.PostService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.HashMap;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller：帖子
@@ -25,6 +23,7 @@ import java.util.Map;
  * @author xmc000
  * @date 2021-05-09 00:05:20
  */
+@Validated
 @RestController
 @RequestMapping("/post")
 public class PostController extends ApiController {
@@ -35,9 +34,8 @@ public class PostController extends ApiController {
      * 获取全部的 帖子 列
      */
     @GetMapping("all")
-    public Object listAll(Post entity) {
-        HttpHeaders headers = new HttpHeaders();
-        Map<String, Object> result = new HashMap<>();
+    public Object listAll() {
+
         List<Post> postList = postService.findPostAll();
         return success(postList);
     }
@@ -64,11 +62,8 @@ public class PostController extends ApiController {
      * @param putPostReq 修改后的信息
      */
     @PutMapping("{id}")
-    public Object update(@PathVariable Long id, PutPostReq putPostReq) {
-        //无内如变化
-        if (putPostReq.getTitle() == null && putPostReq.getContent() == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-        }
+    public Object update(@PathVariable @Min(value = 0, message = "不能小于0") Long id, @Valid @RequestBody(required = false) PutPostReq putPostReq) {
+
         postService.updatePost(id, putPostReq);
 
         List<Post> postList = postService.findPostAll();
@@ -76,7 +71,7 @@ public class PostController extends ApiController {
     }
 
     @DeleteMapping("{id}")
-    public Object delete(@PathVariable Long id) {
+    public Object delete(@PathVariable @Max(value = 1000000, message = "不能大于于1000000") Long id) {
 
         postService.deleteOnePost(id);
 
